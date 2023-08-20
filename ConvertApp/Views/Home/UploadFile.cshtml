@@ -1,0 +1,58 @@
+﻿
+@model RegisterModel
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+{
+   @* <div>
+        <label>First Name </label>
+        <input type="text" name="FirstName" value="John" />
+    </div>
+    <div>
+        <label>Second Name </label>
+        <input type="text" name="SecondName" value="Smith" />
+    </div>*@
+    <div>
+        <label>Resume</label>
+        <input type="file" id="fileUpload1" onchange="uploadFiles('fileUpload1');" />
+      @*  <input type="hidden" id="ResumeFileName" name="ResumeFileName" value="@Model.ResumeFileName" />*@
+    </div>
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+}
+
+<script type="text/javascript">
+
+    function uploadFiles(inputId) {
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i !== files.length; i++) {
+            formData.append("files", files[i]);
+        }
+
+        $.ajax(
+            {
+                url: "/Home/uploadfiles",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    // Set the property of the Model.
+                    $("#ResumeFileName").val(data.fileName);
+                    alert("Files Uploaded! " + data.fileName);
+                }
+            }
+        );
+    }
+</script>
+
+@{
+    ViewData["Title"] = "UploadFile";
+}
+
+<h1>UploadFile</h1>
+
